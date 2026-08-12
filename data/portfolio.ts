@@ -34,7 +34,7 @@ export const experience: Experience[] = [
     role: "Developer",
     company: "PTT Public Company Limited",
     type: "Internship",
-    current: true,
+    current: false,
   },
 ];
 
@@ -46,6 +46,7 @@ export const frontend = [
 ];
 
 export const backend = [
+  { name: "Express.js", icon: "express", color: "#339933" },
   { name: "NestJS", icon: "nestjs", color: "#e0234e" },
   { name: "Golang", icon: "go", color: "#00add8" },
   { name: "Spring Boot", icon: "springboot", color: "#6db33f" },
@@ -66,6 +67,25 @@ export const tools = [
 ];
 
 export const projects: Project[] = [
+  {
+    name: "D-Track",
+    type: "Internal platform",
+    image: "/d-track.png",
+    description: "Developed an internal system for KMUTT’s Finance Office.",
+    stack: ["Next.js", "Elysia"],
+    collaborators: [
+      {
+        username: "ParkPawapon",
+        name: "ParkPawapon",
+        avatarUrl: "",
+      },
+      {
+        username: "aukabanana",
+        name: "aukabanana",
+        avatarUrl: "",
+      },
+    ],
+  },
   {
     name: "ACS Website",
     type: "Department website",
@@ -91,21 +111,7 @@ export const projects: Project[] = [
       },
     ],
   },
-  {
-    name: "Glory",
-    type: "Film platform",
-    image: "/glory.png",
-    description:
-      "A Thai short film platform that lets filmmakers upload and share their work with a wider audience.",
-    stack: ["Next.js", "Elysia"],
-    collaborators: [
-      {
-        username: "Puwizz",
-        name: "Puwizz",
-        avatarUrl: "",
-      },
-    ],
-  },
+
   {
     name: "Pirahus",
     type: "Web platform",
@@ -120,14 +126,6 @@ export const projects: Project[] = [
         avatarUrl: "",
       },
     ],
-  },
-  {
-    name: "OCR Portal",
-    type: "Web application",
-    image: "/ocr.png",
-    description:
-      "A web application that allows users to upload meter images and automatically extracts meter readings using OCR technology.",
-    stack: ["Next.js"],
   },
   {
     name: "Linear System Solver",
