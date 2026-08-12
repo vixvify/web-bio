@@ -11,13 +11,13 @@ import { StackSection } from "@/components/stack-section";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="site-shell min-h-screen bg-[#080909] text-white">
       <LoadingScreen />
       <CustomCursor />
       <div className="bg-grid" />
       <div className="bg-grain" />
       <GlitchBackground />
-      <div className="page-content mx-auto flex w-full max-w-5xl flex-col gap-14 px-6 py-3 sm:gap-20 sm:px-8 lg:px-12 lg:py-5">
+      <div className="page-content mx-auto flex w-full max-w-6xl flex-col gap-14 px-6 py-3 sm:gap-16 sm:px-8 lg:px-12 lg:py-6">
         <SiteHeader />
         <HeroSection />
         <MarqueeStrip />

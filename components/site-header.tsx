@@ -1,27 +1,29 @@
 export function SiteHeader() {
   return (
-    <header className="animate-fade-in delay-0 flex items-center justify-between border-b border-white/10 pb-6">
-      <a
-        href="#top"
-        className="text-xs font-semibold uppercase tracking-[0.2em] text-white transition-opacity hover:opacity-60"
-      >
-        vixvify
+    <header className="site-header animate-fade-in delay-0">
+      <a href="#top" className="brand-mark">
+        <span className="brand-symbol">V</span>
+        <span>vixvify</span>
       </a>
-      <nav className="hidden items-center gap-8 sm:flex">
+      <nav
+        className="hidden items-center gap-7 sm:flex"
+        aria-label="Main navigation"
+      >
         {[
           { label: "Stack", href: "#stack" },
+          { label: "Work", href: "#experience" },
           { label: "Projects", href: "#projects" },
           { label: "Contact", href: "#contact" },
         ].map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            className="nav-link text-xs font-medium uppercase tracking-[0.15em] text-white/50 transition-colors hover:text-white"
-          >
+          <a key={item.href} href={item.href} className="nav-link">
             {item.label}
           </a>
         ))}
       </nav>
+      <div className="header-status">
+        <span className="status-dot" />
+        <span>Open to work</span>
+      </div>
     </header>
   );
 }
