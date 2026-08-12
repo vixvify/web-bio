@@ -1,261 +1,146 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { type MouseEvent, useRef, useState } from "react";
 import { projects } from "@/data/portfolio";
 
 function getGithubAvatarUrl(username: string) {
   return `https://github.com/${username}.png`;
 }
 
+function Collaborators({ index }: { index: number }) {
+  const project = projects[index];
+  if (!project.collaborators) return null;
+
+  return (
+    <div className="mt-5 flex items-center gap-3">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">With</span>
+      <div className="flex -space-x-2">
+        {project.collaborators.map((collaborator) => {
+          const name = collaborator.name ?? collaborator.username;
+          const avatar = collaborator.avatarUrl || getGithubAvatarUrl(collaborator.username);
+          return (
+            <a
+              key={collaborator.username}
+              href={`https://github.com/${collaborator.username}`}
+              target="_blank"
+              rel="noreferrer"
+              title={name}
+              className="relative inline-block transition-transform hover:-translate-y-1"
+            >
+              <Image src={avatar} alt={name} width={28} height={28} unoptimized className="size-7 rounded-full border border-[#080909] bg-[#111]" />
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function PreviewPane({ index }: { index: number }) {
   const tiltRef = useRef<HTMLDivElement>(null);
   const project = projects[index];
 
-  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = tiltRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) scale(1.02)`;
+  const onMouseMove = (event: MouseEvent<HTMLDivElement>) => {
+    const element = tiltRef.current;
+    if (!element) return;
+    const rect = element.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    element.style.transform = `perspective(900px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
   };
 
   const onMouseLeave = () => {
     if (tiltRef.current) {
-      tiltRef.current.style.transform =
-        "perspective(900px) rotateY(0deg) rotateX(0deg) scale(1)";
+      tiltRef.current.style.transform = "perspective(900px) rotateY(0deg) rotateX(0deg) scale(1)";
     }
   };
 
   return (
     <div className="sticky top-8 flex flex-col gap-5">
-      <div
-        key={index}
-        ref={tiltRef}
-        onMouseMove={onMouseMove}
-        onMouseLeave={onMouseLeave}
-        className="preview-image relative aspect-video overflow-hidden bg-[#0a0a0a]"
-        style={{
-          transition: "transform 0.18s ease",
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={`${project.name} preview`}
-            fill
-            className="object-cover"
-          />
-        ) : (
-          <div className="h-full w-full bg-[#111]" />
-        )}
+      <div ref={tiltRef} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave} className="project-preview preview-image">
+        {project.image ? <Image src={project.image} alt={`${project.name} preview`} fill className="object-cover" /> : <div className="h-full w-full bg-[#111]" />}
+        <div className="project-preview-shade" />
+        <div className="project-preview-top"><span>Selected / {String(index + 1).padStart(2, "0")}</span><span>↗</span></div>
+        <div className="project-preview-bottom"><span>{project.type}</span><strong>{project.name}</strong></div>
       </div>
 
-      <div key={`desc-${index}`} className="preview-fade">
-        <p className="text-sm leading-7 text-white/50">{project.description}</p>
-
-        {project.collaborators ? (
-          <div className="mt-4 flex items-center gap-3">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/20">
-              With
-            </span>
-            <div className="flex -space-x-2">
-              {project.collaborators.map((c) => {
-                const name = c.name ?? c.username;
-                const avatar = c.avatarUrl || getGithubAvatarUrl(c.username);
-                return (
-                  <a
-                    key={c.username}
-                    href={`https://github.com/${c.username}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    title={name}
-                    className="relative inline-block transition-transform hover:-translate-y-0.5"
-                  >
-                    <Image
-                      src={avatar}
-                      alt={name}
-                      width={28}
-                      height={28}
-                      unoptimized
-                      className="size-7 rounded-full border border-black bg-[#111]"
-                    />
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
+      <div className="preview-fade">
+        <p className="max-w-lg text-sm leading-7 text-white/50">{project.description}</p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.stack.map((item) => <span key={item} className="tag">{item}</span>)}
+        </div>
+        <Collaborators index={index} />
       </div>
     </div>
   );
 }
 
 export function ProjectsSection() {
-  const [hovered, setHovered] = useState(0); // desktop sidebar preview
-  const [expanded, setExpanded] = useState(0); // mobile accordion (-1 = all closed)
+  const [hovered, setHovered] = useState(0);
+  const [expanded, setExpanded] = useState(-1);
 
   return (
-    <section id="projects" className="animate-fade-up delay-600">
-      <div className="mb-8 flex items-end justify-between border-b border-white/10 pb-6">
+    <section id="projects" className="section-block animate-fade-up delay-600">
+      <div className="section-heading">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/30">
-            Selected Work
-          </p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-3xl">
-            Projects
-          </h2>
+          <p className="section-kicker"><span>05</span> / selected work</p>
+          <h2>Things I&apos;ve shipped.</h2>
         </div>
-        <span className="text-xs text-white/20">
-          {projects.length} projects
-        </span>
+        <span className="section-count">0{projects.length} projects</span>
       </div>
 
-      <div className="hidden md:grid md:grid-cols-[1fr_1fr] md:gap-10">
-        <div className="flex flex-col divide-y divide-white/10">
-          {projects.map((project, i) => (
-            <div
+      <div className="projects-layout hidden md:grid">
+        <div className="project-list">
+          {projects.map((project, index) => (
+            <button
               key={project.name}
-              className="project-row group cursor-pointer py-6 transition-all duration-300 first:pt-0"
-              style={{ opacity: hovered === i ? 1 : 0.28 }}
-              onMouseEnter={() => setHovered(i)}
+              type="button"
+              className={`project-row group ${hovered === index ? "is-active" : ""}`}
+              onMouseEnter={() => setHovered(index)}
+              onFocus={() => setHovered(index)}
             >
-              <div className="flex items-start gap-5">
-                <span className="mt-1.5 shrink-0 text-[10px] font-semibold tabular-nums text-white/30">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-black leading-tight tracking-tight text-white transition-all group-hover:tracking-wide">
-                    {project.name}
-                  </h3>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
-                    {project.type}
-                  </p>
-                  <div className="mt-1 flex flex-wrap gap-2">
-                    {project.stack.map((item) => (
-                      <span
-                        key={item}
-                        className="border border-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/30"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+              <span className="project-index">{String(index + 1).padStart(2, "0")}</span>
+              <span className="project-row-copy">
+                <strong>{project.name}</strong>
+                <small>{project.type}</small>
+                <span className="project-tags">{project.stack.map((item) => <i key={item}>{item}</i>)}</span>
+              </span>
+              <span className="project-arrow">↗</span>
+            </button>
           ))}
         </div>
-
         <PreviewPane index={hovered} />
       </div>
 
-      <div className="flex flex-col divide-y divide-white/10 md:hidden">
-        {projects.map((project, i) => {
-          const isOpen = expanded === i;
-          const name = project.name;
-
+      <div className="flex flex-col gap-3 md:hidden">
+        {projects.map((project, index) => {
+          const isOpen = expanded === index;
           return (
-            <div key={name}>
-              <button
-                className="flex w-full items-center gap-4 py-5 text-left first:pt-0"
-                onClick={() => setExpanded(isOpen ? -1 : i)}
-                aria-expanded={isOpen}
-              >
-                <span className="shrink-0 text-[10px] font-semibold tabular-nums text-white/25">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-lg font-black tracking-tight text-white leading-tight pt-5">
-                    {name}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
-                    {project.type}
-                  </p>
-                </div>
-                <span
-                  className="shrink-0 text-white/30 text-lg transition-transform duration-300"
-                  style={{
-                    transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                  }}
-                >
-                  +
-                </span>
+            <div key={project.name} className="overflow-hidden border border-white/10 bg-[#0c110e] shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
+              <button type="button" className="flex min-h-[5.75rem] w-full items-center gap-4 px-4 py-5 text-left" onClick={() => setExpanded(isOpen ? -1 : index)} aria-expanded={isOpen}>
+                <span className="shrink-0 text-[10px] font-semibold tabular-nums text-[#c8ff6a]/60">{String(index + 1).padStart(2, "0")}</span>
+                <span className="min-w-0 flex-1"><span className="block pt-1 text-lg font-black leading-tight tracking-tight text-white">{project.name}</span><span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">{project.type}</span></span>
+                <span className="shrink-0 text-lg text-[#c8ff6a]/70 transition-transform duration-300" style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}>+</span>
               </button>
-
               <div
-                className="accordion-body overflow-hidden"
+                className="overflow-hidden px-4"
+                aria-hidden={!isOpen}
                 style={{
-                  display: "grid",
-                  gridTemplateRows: isOpen ? "1fr" : "0fr",
-                  transition:
-                    "grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  maxHeight: isOpen ? "62rem" : "0px",
+                  opacity: isOpen ? 1 : 0,
+                  transform: isOpen ? "translateY(0)" : "translateY(-0.75rem)",
+                  transition: "max-height 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 260ms ease, transform 500ms cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               >
-                <div className="min-h-0">
+                <div className="accordion-inner">
                   <div className="flex flex-col gap-4 pb-6">
-                    <div className="relative aspect-video overflow-hidden bg-[#0a0a0a]">
-                      {project.image ? (
-                        <Image
-                          src={project.image}
-                          alt={`${project.name} preview`}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="h-full w-full bg-[#111]" />
-                      )}
+                    <div className="project-preview relative aspect-video">
+                      {project.image ? <Image src={project.image} alt={`${project.name} preview`} fill className="object-cover" /> : <div className="h-full w-full bg-[#111]" />}
                     </div>
-
-                    <p className="text-sm leading-7 text-white/50">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {project.stack.map((item) => (
-                        <span
-                          key={item}
-                          className="border border-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/40"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-
-                    {project.collaborators ? (
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/20">
-                          With
-                        </span>
-                        <div className="flex -space-x-2">
-                          {project.collaborators.map((c) => {
-                            const cName = c.name ?? c.username;
-                            const avatar =
-                              c.avatarUrl || getGithubAvatarUrl(c.username);
-                            return (
-                              <a
-                                key={c.username}
-                                href={`https://github.com/${c.username}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={cName}
-                              >
-                                <Image
-                                  src={avatar}
-                                  alt={cName}
-                                  width={28}
-                                  height={28}
-                                  unoptimized
-                                  className="size-7 rounded-full border border-black bg-[#111]"
-                                />
-                              </a>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ) : null}
+                    <p className="text-sm leading-7 text-white/50">{project.description}</p>
+                    <div className="flex flex-wrap gap-2">{project.stack.map((item) => <span key={item} className="tag">{item}</span>)}</div>
+                    <Collaborators index={index} />
                   </div>
                 </div>
               </div>
