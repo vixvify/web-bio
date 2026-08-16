@@ -5,12 +5,6 @@ import { ScrambleText } from "@/components/scramble-text";
 export function HeroSection() {
   return (
     <section id="top" className="hero-section" style={{ paddingTop: 0 }}>
-      <div className="hero-meta animate-fade-up delay-100">
-        <span><b>01</b> / intro</span>
-        <span>Full Stack Developer</span>
-        <span>Bangkok, TH <i /></span>
-      </div>
-
       <div className="hero-layout">
         <div className="hero-copy">
           <p className="hero-eyebrow animate-fade-up delay-100">
