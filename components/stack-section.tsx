@@ -1,4 +1,4 @@
-import { backend, frontend, tools } from "@/data/portfolio";
+import { backend, frontend, infrastructure, tools } from "@/data/portfolio";
 import { SkillGroup } from "./skill-group";
 
 export function StackSection() {
@@ -12,13 +12,16 @@ export function StackSection() {
         <p className="section-note">A practical stack for shipping<br className="hidden sm:block" /> from first sketch to production.</p>
       </div>
       <div className="stack-grid">
-        <div className="stack-column pb-7 sm:pb-0 sm:pr-8">
+        <div className="stack-column">
           <SkillGroup title="Frontend" items={frontend} />
         </div>
-        <div className="stack-column py-7 sm:px-8 sm:py-0">
+        <div className="stack-column">
           <SkillGroup title="Backend" items={backend} />
         </div>
-        <div className="stack-column pt-7 sm:pl-8 sm:pt-0">
+        <div className="stack-column">
+          <SkillGroup title="Infrastructure" items={infrastructure} />
+        </div>
+        <div className="stack-column">
           <SkillGroup title="Tools" items={tools} />
         </div>
       </div>
