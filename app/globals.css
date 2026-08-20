@@ -130,10 +130,11 @@ body {
 .section-heading h2 { margin: 0; color: var(--fg); font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 850; letter-spacing: -0.07em; line-height: 0.95; }
 .section-note { margin: 0; color: rgba(255,255,255,0.34); font-size: 0.72rem; line-height: 1.8; text-align: right; }
 .section-count { color: var(--acid); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; }
-.stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.stack-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .stack-grid > .stack-column { position: relative; overflow: hidden; padding: 1.5rem 1.5rem 1.25rem !important; border: 1px solid rgba(200,255,106,0.2); background: linear-gradient(145deg, #121a13 0%, #0b100d 100%); box-shadow: 0 18px 45px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.05); will-change: transform; transition: transform 420ms cubic-bezier(0.16,1,0.3,1), border-color 260ms ease, box-shadow 420ms ease; animation: stackReveal 700ms cubic-bezier(0.16,1,0.3,1) both; }
 .stack-grid > .stack-column:nth-child(2) { animation-delay: 80ms; }
 .stack-grid > .stack-column:nth-child(3) { animation-delay: 160ms; }
+.stack-grid > .stack-column:nth-child(4) { animation-delay: 240ms; }
 .stack-grid > .stack-column::after { position: absolute; inset: -50% 30%; z-index: 0; background: linear-gradient(90deg, transparent, rgba(200,255,106,0.12), transparent); content: ""; pointer-events: none; transform: translateX(-180%) rotate(18deg); transition: transform 650ms cubic-bezier(0.16,1,0.3,1); }
 .stack-grid > .stack-column:hover { transform: translateY(-0.55rem) scale(1.015); border-color: rgba(200,255,106,0.58); box-shadow: 0 28px 65px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,255,106,0.1), inset 0 1px 0 rgba(255,255,255,0.1); }
 .stack-grid > .stack-column:hover::after { transform: translateX(180%) rotate(18deg); }
