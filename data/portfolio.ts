@@ -57,17 +57,25 @@ export const backend = [
   },
 ];
 
+export const database = [
+  { name: "PostgreSQL", icon: "postgresql", color: "#4169e1" },
+  { name: "SQL", iconText: "SQL", color: "#4479a1" },
+  { name: "MongoDB", icon: "mongodb", color: "#47a248" },
+  { name: "Prisma", icon: "prisma", color: "#ffffff" },
+];
+
 export const infrastructure = [
   { name: "Docker", icon: "docker", color: "#2496ed" },
   { name: "Nginx", icon: "nginx", color: "#009639" },
   { name: "Linux", icon: "linux", color: "#fcc624" },
+  { name: "Grafana", icon: "grafana", color: "#f46800" },
+  { name: "Prometheus", icon: "prometheus", color: "#e6522c" },
   { name: "Cloudflare", icon: "cloudflare", color: "#f38020" },
 ];
 
 export const tools = [
   { name: "Git", icon: "git", color: "#f05032" },
   { name: "Figma", icon: "figma", color: "#f24e1e" },
-  { name: "PostgreSQL", icon: "postgresql", color: "#4169e1" },
   { name: "Postman", icon: "postman", color: "#ff6c37" },
 ];
 

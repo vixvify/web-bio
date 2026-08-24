@@ -1,4 +1,4 @@
-import { backend, frontend, infrastructure, tools } from "@/data/portfolio";
+import { backend, database, frontend, infrastructure, tools } from "@/data/portfolio";
 import { SkillGroup } from "./skill-group";
 
 export function StackSection() {
@@ -17,6 +17,9 @@ export function StackSection() {
         </div>
         <div className="stack-column">
           <SkillGroup title="Backend" items={backend} />
+        </div>
+        <div className="stack-column">
+          <SkillGroup title="Database" items={database} />
         </div>
         <div className="stack-column">
           <SkillGroup title="Infrastructure" items={infrastructure} />
