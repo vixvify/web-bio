@@ -8,7 +8,7 @@ export function HeroSection() {
       <div className="hero-layout">
         <div className="hero-copy">
           <p className="hero-eyebrow animate-fade-up delay-100">
-            I turn complex ideas into{" "}<br className="hidden sm:block" />
+            I turn complex ideas into<br className="hidden sm:block" />{" "}
             <em>clear digital experiences.</em>
           </p>
           <h1 className="hero-title animate-fade-up delay-200">
